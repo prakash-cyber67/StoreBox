@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StoreBox | Private file & text storage</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <main id="landingView" class="landing-view" aria-label="StoreBox landing page">
+      <section class="landing-card glass-card">
+        <div class="brand">
+          <div class="logo-mark" aria-hidden="true">SB</div>
+          <div>
+            <h1 class="brand-title">StoreBox</h1>
+            <p class="brand-subtitle">Private file & text storage</p>
+          </div>
+        </div>
+
+        <h2>Store your files &amp; text privately.</h2>
+        <p class="landing-subtitle">
+          No accounts. No signups. No installs. Just choose one code.
+        </p>
+
+        <form id="openForm" class="landing-form" autocomplete="off">
+          <label for="storeboxCode" class="sr-only">Enter your StoreBox code</label>
+          <input
+            id="storeboxCode"
+            name="storeboxCode"
+            type="text"
+            maxlength="40"
+            placeholder="Enter your StoreBox code"
+            required
+          />
+          <button type="submit" class="btn btn-primary">Open</button>
+        </form>
+
+        <button id="createStoreBox" class="btn btn-secondary" type="button">
+          Create a new StoreBox
+        </button>
+
+        <p class="security-copy">
+          Your StoreBox is private. Your code is required to access this StoreBox.
+          Frontend demo only — production encryption and backend security will be added later.
+        </p>
+      </section>
+    </main>
+
+    <section id="dashboardView" class="dashboard-view hidden" aria-label="StoreBox dashboard">
+      <aside id="sidebar" class="sidebar glass-card">
+        <div class="sidebar-header">
+          <div class="brand">
+            <div class="logo-mark" aria-hidden="true">SB</div>
+            <div>
+              <h2 class="brand-title">StoreBox</h2>
+              <p class="storebox-code" id="activeCodeLabel"></p>
+            </div>
+          </div>
+          <button id="toggleSidebar" class="icon-btn" aria-label="Toggle sidebar">☰</button>
+        </div>
+
+        <nav class="nav-list" aria-label="Dashboard navigation">
+          <button class="nav-item active" data-panel="filesPanel">My Files</button>
+          <button class="nav-item" data-panel="notesPanel">My Notes</button>
+          <button class="nav-item" data-panel="foldersPanel">Folders</button>
+          <button class="nav-item" data-panel="sharedPanel">Shared</button>
+          <button class="nav-item" data-panel="trashPanel">Trash</button>
+          <button class="nav-item" data-panel="storagePanel">Storage Usage</button>
+          <button class="nav-item" data-panel="settingsPanel">Settings</button>
+        </nav>
+      </aside>
+
+      <div class="dashboard-main">
+        <header class="dashboard-header glass-card">
+          <div>
+            <h2>Welcome to StoreBox</h2>
+            <p id="securityText">Your StoreBox is private.</p>
+          </div>
+          <div class="search-wrap">
+            <label for="globalSearch" class="sr-only">Search files and notes</label>
+            <input id="globalSearch" type="search" placeholder="Search files and notes" />
+          </div>
+        </header>
+
+        <section class="actions-grid">
+          <article class="action-card glass-card">
+            <h3>Upload File</h3>
+            <p>Choose files and store them locally for this frontend demo.</p>
+            <input id="fileInput" type="file" />
+            <div id="selectedFileMeta" class="muted">No file selected</div>
+            <button id="uploadFileBtn" class="btn btn-primary" type="button">Upload</button>
+          </article>
+
+          <article class="action-card glass-card">
+            <h3>Encrypt Text</h3>
+            <p>Demo encryption uses Web Crypto API in your browser.</p>
+            <label for="noteTitle">Title</label>
+            <input id="noteTitle" type="text" placeholder="Note title" maxlength="80" />
+            <label for="noteBody">Text</label>
+            <textarea id="noteBody" rows="4" placeholder="Write your note"></textarea>
+            <button id="saveNoteBtn" class="btn btn-primary" type="button">Save / Encrypt</button>
+          </article>
+        </section>
+
+        <section id="filesPanel" class="panel glass-card active-panel" aria-label="Files panel">
+          <div class="panel-head">
+            <h3>My Files</h3>
+            <div class="inline-tools">
+              <label for="fileSort" class="sr-only">Sort files</label>
+              <select id="fileSort">
+                <option value="newest">Newest</option>
+                <option value="name">Name</option>
+                <option value="size">Size</option>
+              </select>
+              <label for="fileFolderMove" class="sr-only">Move selected file to folder</label>
+              <select id="fileFolderMove"></select>
+            </div>
+          </div>
+          <div id="filesList" class="items-list"></div>
+        </section>
+
+        <section id="notesPanel" class="panel glass-card" aria-label="Notes panel">
+          <div class="panel-head">
+            <h3>My Notes</h3>
+            <div class="inline-tools">
+              <select id="noteFolderMove"></select>
+              <button id="newNoteBtn" class="btn btn-secondary" type="button">New Note</button>
+            </div>
+          </div>
+          <div id="notesList" class="items-list"></div>
+        </section>
+
+        <section id="foldersPanel" class="panel glass-card" aria-label="Folders panel">
+          <div class="panel-head">
+            <h3>Folders</h3>
+            <div class="inline-tools">
+              <input id="newFolderName" type="text" maxlength="40" placeholder="Create folder" />
+              <button id="createFolderBtn" class="btn btn-secondary" type="button">Create</button>
+            </div>
+          </div>
+          <div id="foldersList" class="items-list"></div>
+        </section>
+
+        <section id="sharedPanel" class="panel glass-card" aria-label="Shared panel">
+          <h3>Shared</h3>
+          <p class="muted">Sharing links and permissions UI can be connected in a future backend release.</p>
+        </section>
+
+        <section id="trashPanel" class="panel glass-card" aria-label="Trash panel">
+          <div class="panel-head">
+            <h3>Trash</h3>
+            <button id="clearTrashBtn" class="btn btn-danger" type="button">Clear Trash</button>
+          </div>
+          <div id="trashList" class="items-list"></div>
+        </section>
+
+        <section id="storagePanel" class="panel glass-card" aria-label="Storage usage panel">
+          <h3>Storage Used</h3>
+          <p id="storageSummary">0 MB / 10 GB</p>
+          <div class="progress-track">
+            <div id="storageProgress" class="progress-fill"></div>
+          </div>
+        </section>
+
+        <section id="settingsPanel" class="panel glass-card" aria-label="Settings panel">
+          <h3>Settings</h3>
+          <div class="settings-grid">
+            <label>
+              Change StoreBox code
+              <div class="inline-tools">
+                <input id="newCode" type="text" maxlength="40" placeholder="New code" />
+                <button id="changeCodeBtn" class="btn btn-secondary" type="button">Change</button>
+              </div>
+            </label>
+
+            <label class="toggle-row">
+              <span>Auto-delete after 30 days (demo setting)</span>
+              <input id="autoDeleteToggle" type="checkbox" />
+            </label>
+
+            <label class="toggle-row">
+              <span>Dark / Light mode</span>
+              <input id="themeToggle" type="checkbox" checked />
+            </label>
+
+            <div>
+              <h4>Storage information</h4>
+              <p id="storageInfoText" class="muted"></p>
+            </div>
+
+            <button id="deleteStoreBoxBtn" class="btn btn-danger" type="button">Delete StoreBox</button>
+          </div>
+        </section>
+      </div>
+
+      <nav class="bottom-nav glass-card" aria-label="Mobile quick navigation">
+        <button class="nav-item active" data-panel="filesPanel">Files</button>
+        <button class="nav-item" data-panel="notesPanel">Notes</button>
+        <button class="nav-item" data-panel="foldersPanel">Folders</button>
+        <button class="nav-item" data-panel="settingsPanel">Settings</button>
+      </nav>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
